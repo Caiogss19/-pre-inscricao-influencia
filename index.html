@@ -3,124 +3,216 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#273551" />
 <title>Pré-inscrição · Influência 2.0</title>
 <style>
   :root{
-    --bg:#273551;        /* fundo */
-    --accent:#e8641a;    /* laranja do CTA */
+    --bg:#273551;
+    --bg-2:#1e2a44;
+    --accent:#e8641a;
+    --accent-2:#f2751f;
     --accent-h:#d3560f;
-    --field:#ffffff;
     --text:#ffffff;
-    --muted:rgba(255,255,255,.78);
-    --err:#ffd2c2;
+    --muted:rgba(255,255,255,.72);
+    --line:rgba(255,255,255,.12);
+    --err:#ffcdbb;
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:var(--bg);
     color:var(--text);
     -webkit-font-smoothing:antialiased;
     min-height:100vh;
-    display:flex;
-    align-items:flex-start;
-    justify-content:center;
-    padding:28px 16px;
+    padding:28px 16px 40px;
+    background:
+      radial-gradient(1100px 520px at 50% -8%, rgba(232,100,26,.16), transparent 60%),
+      radial-gradient(760px 460px at 100% 108%, rgba(96,130,214,.18), transparent 55%),
+      linear-gradient(180deg, var(--bg), var(--bg-2));
+    background-attachment:fixed;
   }
-  .wrap{width:100%;max-width:560px;margin:0 auto}
-  .hero{
-    width:100%;height:auto;display:block;border-radius:12px;margin-bottom:22px;
+  .wrap{width:100%;max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+
+  /* ---- HERO ---- */
+  .hero-img{width:100%;height:auto;display:block;border-radius:16px}
+  .card{
+    background:linear-gradient(180deg, rgba(255,255,255,.065), rgba(255,255,255,.02));
+    border:1px solid var(--line);
+    border-radius:18px;
+    box-shadow:0 22px 60px rgba(0,0,0,.38);
   }
-  .copy{margin-bottom:24px;line-height:1.55}
-  .copy p{margin:0 0 12px;font-size:15px;color:var(--muted)}
+  .hero{padding:24px 24px 26px;position:relative;overflow:hidden}
+  .hero::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(420px 200px at 82% -20%, rgba(232,100,26,.22), transparent 60%);
+  }
+  .brand{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative}
+  .logo{display:flex;align-items:center;gap:8px;font-weight:700;letter-spacing:.5px;font-size:15px}
+  .logo .star{color:var(--accent);font-size:16px}
+  .logo b{font-weight:800}
+  .datepill{
+    display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;
+    border:1px solid rgba(232,100,26,.55);background:rgba(232,100,26,.12);
+    font-size:13px;font-weight:800;letter-spacing:1px;white-space:nowrap;
+  }
+  .tag{
+    position:relative;display:inline-flex;align-items:center;gap:10px;margin:20px 0 12px;
+    font-size:12px;font-weight:800;letter-spacing:3px;color:var(--muted);text-transform:uppercase;
+  }
+  .tag::after{content:"";height:1px;width:44px;background:var(--line)}
+  .hero h1{
+    position:relative;margin:0;font-weight:800;line-height:1.02;letter-spacing:-.5px;
+    font-size:clamp(32px,9vw,46px);
+  }
+  .hero h1 .v{color:var(--accent);}
+  .kicker{position:relative;margin:12px 0 0;color:var(--muted);font-size:15px;line-height:1.5}
+
+  /* ---- COPY ---- */
+  .copy{padding:22px 24px}
+  .copy p{margin:0 0 12px;font-size:15px;line-height:1.6;color:var(--muted)}
   .copy p:last-child{margin-bottom:0}
-  .copy .lead{font-size:17px;font-weight:700;color:var(--text)}
+  .copy .lead{font-size:16.5px;font-weight:700;color:var(--text)}
   .copy strong{color:var(--text)}
-  .field{margin-bottom:14px}
-  .field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}
-  .field input{
-    width:100%;padding:13px 14px;border:0;border-radius:10px;
-    background:var(--field);color:#1f2633;font-size:15px;outline:none;
+
+  /* ---- PERKS ---- */
+  .perks{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-direction:column;gap:1px}
+  .perks li{
+    display:flex;align-items:center;gap:12px;padding:13px 24px;
+    border-top:1px solid var(--line);font-size:14.5px;color:var(--text)
   }
-  .field input::placeholder{color:#9aa2b1}
-  .field input:focus{box-shadow:0 0 0 3px rgba(232,100,26,.45)}
+  .perks .ic{
+    flex:none;width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+    background:rgba(232,100,26,.14);border:1px solid rgba(232,100,26,.3);font-size:16px
+  }
+
+  /* ---- FORM ---- */
+  .formcard{padding:22px 24px 24px}
+  .formcard h2{margin:0 0 4px;font-size:19px;font-weight:800}
+  .formcard .sub{margin:0 0 18px;font-size:13.5px;color:var(--muted)}
+  .field{margin-bottom:13px}
+  .field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px;color:var(--muted)}
+  .field input{
+    width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:11px;
+    background:rgba(255,255,255,.05);color:#fff;font-size:15px;outline:none;
+    transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .field input::placeholder{color:rgba(255,255,255,.38)}
+  .field input:focus{border-color:var(--accent);background:rgba(255,255,255,.08);box-shadow:0 0 0 3px rgba(232,100,26,.22)}
   .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
   button{
-    width:100%;margin-top:6px;padding:15px 18px;border:0;border-radius:12px;
-    background:var(--accent);color:#fff;font-size:16px;font-weight:800;
-    letter-spacing:.3px;text-transform:uppercase;cursor:pointer;
-    transition:background .15s ease,transform .05s ease;
+    width:100%;margin-top:8px;padding:16px 18px;border:0;border-radius:13px;
+    background:linear-gradient(180deg,var(--accent-2),var(--accent));color:#fff;
+    font-size:16px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;
+    box-shadow:0 12px 26px rgba(232,100,26,.34);
+    transition:transform .05s ease, box-shadow .15s ease, filter .15s ease;
   }
-  button:hover{background:var(--accent-h)}
+  button:hover{filter:brightness(1.05);box-shadow:0 16px 32px rgba(232,100,26,.42)}
   button:active{transform:translateY(1px)}
-  button:disabled{opacity:.65;cursor:not-allowed}
-  .msg{margin-top:14px;font-size:14px;text-align:center;min-height:20px}
+  button:disabled{opacity:.65;cursor:not-allowed;box-shadow:none}
+  .msg{margin-top:13px;font-size:14px;text-align:center;min-height:20px}
   .msg.error{color:var(--err)}
   .legal{margin-top:14px;font-size:11px;color:var(--muted);text-align:center;line-height:1.5}
-  /* estado de sucesso */
-  .done{text-align:center;padding:12px 4px}
+
+  /* ---- SUCESSO ---- */
+  .done{text-align:center;padding:34px 24px 40px}
   .done .check{
-    width:56px;height:56px;border-radius:50%;background:var(--accent);
-    display:flex;align-items:center;justify-content:center;margin:0 auto 14px;
-    font-size:28px;color:#fff;
+    width:60px;height:60px;border-radius:50%;
+    background:linear-gradient(180deg,var(--accent-2),var(--accent));
+    display:flex;align-items:center;justify-content:center;margin:0 auto 16px;
+    font-size:30px;color:#fff;box-shadow:0 12px 26px rgba(232,100,26,.4)
   }
-  .done h2{margin:0 0 6px;font-size:20px;font-weight:800}
-  .done p{margin:0;color:var(--muted);font-size:14px}
+  .done h2{margin:0 0 6px;font-size:21px;font-weight:800}
+  .done p{margin:0 auto;max-width:340px;color:var(--muted);font-size:14.5px;line-height:1.55}
+
+  .foot{text-align:center;font-size:12px;color:rgba(255,255,255,.5);padding-top:2px}
+  .foot .star{color:var(--accent)}
   .hidden{display:none}
 </style>
 </head>
 <body>
   <div class="wrap">
-    <img class="hero" src="header.png" alt="Influência 2.0 · Save the Seat · 20.08.26" onerror="this.style.display='none'" />
 
-    <div class="copy">
+    <!-- Banner opcional: se você adicionar header.png/jpg no repo, ele aparece no topo -->
+    <img class="hero-img" src="header.png" alt="Influência 2.0 · Save the Seat · 20.08.26" onerror="this.remove()" />
+
+    <!-- HERO (CSS) -->
+    <section class="card hero">
+      <div class="brand">
+        <span class="logo"><span class="star">✦</span> spark <b>MAXX</b></span>
+        <span class="datepill">📅 20 · 08 · 26</span>
+      </div>
+      <div class="tag">Save the seat</div>
+      <h1>INFLUÊNCIA <span class="v">2.0</span></h1>
+      <p class="kicker">Garanta a sua vaga em nosso próximo evento.</p>
+    </section>
+
+    <!-- COPY -->
+    <section class="card copy">
       <p class="lead">O sucesso da nossa 1ª edição do Influência 2.0 foi gigante, e a 2ª edição já está a caminho!</p>
       <p>Será um evento exclusivo, desenhado sob medida para profissionais do mercado de influência. <strong>Spoiler:</strong> o carrinho de compras vai ficar cheio e nós vamos te mostrar as estratégias para sua marca não ficar de fora dessa no 2º semestre.</p>
       <p><strong>Faça a sua pré-inscrição</strong> para ser o primeiro a saber assim que as vagas oficiais forem abertas!</p>
-    </div>
+    </section>
 
-    <form id="form" novalidate>
-      <div class="field">
-        <label for="nome">Nome</label>
-        <input id="nome" name="nome" type="text" autocomplete="name" placeholder="Seu nome completo" required />
-      </div>
-      <div class="field">
-        <label for="email">E-mail</label>
-        <input id="email" name="email" type="email" autocomplete="email" placeholder="voce@empresa.com" required />
-      </div>
-      <div class="field">
-        <label for="telefone">Telefone</label>
-        <input id="telefone" name="telefone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(11) 99999-9999" required />
-      </div>
-      <div class="field">
-        <label for="empresa">Empresa</label>
-        <input id="empresa" name="empresa" type="text" autocomplete="organization" placeholder="Nome da sua empresa" required />
-      </div>
+    <!-- PERKS -->
+    <section class="card">
+      <ul class="perks">
+        <li><span class="ic">🎯</span> Estratégias sob medida pra sua marca</li>
+        <li><span class="ic">🔒</span> Evento exclusivo do mercado de influência</li>
+        <li><span class="ic">⚡</span> Acesso prioritário assim que as vagas abrirem</li>
+      </ul>
+    </section>
 
-      <!-- honeypot anti-spam: humanos não preenchem -->
-      <div class="hp" aria-hidden="true">
-        <label>Não preencha<input id="website" name="website" type="text" tabindex="-1" autocomplete="off" /></label>
+    <!-- FORM -->
+    <section class="card formcard" id="formcard">
+      <form id="form" novalidate>
+        <h2>Faça sua pré-inscrição</h2>
+        <p class="sub">Leva menos de 30 segundos.</p>
+
+        <div class="field">
+          <label for="nome">Nome</label>
+          <input id="nome" name="nome" type="text" autocomplete="name" placeholder="Seu nome completo" required />
+        </div>
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input id="email" name="email" type="email" autocomplete="email" placeholder="voce@empresa.com" required />
+        </div>
+        <div class="field">
+          <label for="telefone">Telefone</label>
+          <input id="telefone" name="telefone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(11) 99999-9999" required />
+        </div>
+        <div class="field">
+          <label for="empresa">Empresa</label>
+          <input id="empresa" name="empresa" type="text" autocomplete="organization" placeholder="Nome da sua empresa" required />
+        </div>
+
+        <!-- honeypot anti-spam: humanos não preenchem -->
+        <div class="hp" aria-hidden="true">
+          <label>Não preencha<input id="website" name="website" type="text" tabindex="-1" autocomplete="off" /></label>
+        </div>
+
+        <button type="submit" id="submit">Quero a minha vaga!</button>
+        <div class="msg" id="msg"></div>
+        <div class="legal">Ao enviar, você concorda em receber comunicações da Spark Maxx sobre o evento.</div>
+      </form>
+
+      <div class="done hidden" id="done">
+        <div class="check">✓</div>
+        <h2>Pré-inscrição confirmada!</h2>
+        <p>Você está na lista. Assim que as vagas abrirem, avisamos você em primeira mão.</p>
       </div>
+    </section>
 
-      <button type="submit" id="submit">Quero a minha vaga!</button>
-      <div class="msg" id="msg"></div>
-      <div class="legal">Ao enviar, você concorda em receber comunicações da Spark Maxx sobre o evento.</div>
-    </form>
-
-    <div class="done hidden" id="done">
-      <div class="check">✓</div>
-      <h2>Pré-inscrição confirmada!</h2>
-      <p>Você está na lista. Assim que as vagas abrirem, avisamos você em primeira mão.</p>
-    </div>
+    <div class="foot"><span class="star">✦</span> spark MAXX · Influência 2.0</div>
   </div>
 
 <script>
   // ==== CONFIG: URL de produção do webhook n8n ====
   var WEBHOOK_URL = "https://growthsparkmaxx.app.n8n.cloud/webhook/pre-inscricao-influencia";
 
-  // origem lida da URL (ex.: ?origem=news-maxxnews); default Maxxnews
   var params = new URLSearchParams(location.search);
-  var ORIGEM = (params.get("origem") || params.get("utm_source") || "Maxxnews").trim();
+  function p(k){ return (params.get(k) || "").trim(); }
+  // origem: ?origem= tem prioridade; senão utm_source; senão default
+  var ORIGEM = p("origem") || p("utm_source") || "Maxxnews";
 
   var form = document.getElementById("form");
   var msg = document.getElementById("msg");
@@ -153,6 +245,10 @@
       telefone: tel.value.trim(),
       empresa: document.getElementById("empresa").value.trim(),
       origem: ORIGEM,
+      utm_source: p("utm_source"),
+      utm_medium: p("utm_medium"),
+      utm_campaign: p("utm_campaign"),
+      utm_content: p("utm_content"),
       pagina: (document.referrer || location.href)
     };
 
@@ -176,6 +272,7 @@
   function showDone(){
     form.classList.add("hidden");
     document.getElementById("done").classList.remove("hidden");
+    document.getElementById("formcard").scrollIntoView({behavior:"smooth", block:"center"});
   }
 </script>
 </body>
