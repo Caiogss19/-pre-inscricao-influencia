@@ -6,8 +6,7 @@
 <title>Pré-inscrição · Influência 2.0</title>
 <style>
   :root{
-    --card:#6f7d9e;      /* cinza-azulado do e-mail */
-    --card2:#63708f;
+    --bg:#273551;        /* fundo */
     --accent:#e8641a;    /* laranja do CTA */
     --accent-h:#d3560f;
     --field:#ffffff;
@@ -19,13 +18,17 @@
   html,body{margin:0;padding:0}
   body{
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:transparent;
+    background:var(--bg);
     color:var(--text);
     -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
   }
   .wrap{
-    max-width:520px;margin:0 auto;padding:24px 20px;
-    background:linear-gradient(180deg,var(--card),var(--card2));
+    width:100%;max-width:520px;margin:0 auto;padding:24px 20px;
+    background:var(--bg);
     border-radius:16px;
   }
   .head{text-align:center;margin-bottom:20px}
