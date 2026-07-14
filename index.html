@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pré-inscrição · Influência 2.0</title>
+<style>
+  :root{
+    --card:#6f7d9e;      /* cinza-azulado do e-mail */
+    --card2:#63708f;
+    --accent:#e8641a;    /* laranja do CTA */
+    --accent-h:#d3560f;
+    --field:#ffffff;
+    --text:#ffffff;
+    --muted:rgba(255,255,255,.75);
+    --err:#ffd2c2;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:transparent;
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{
+    max-width:520px;margin:0 auto;padding:24px 20px;
+    background:linear-gradient(180deg,var(--card),var(--card2));
+    border-radius:16px;
+  }
+  .head{text-align:center;margin-bottom:20px}
+  .head h1{font-size:22px;line-height:1.25;margin:0 0 6px;font-weight:800}
+  .head p{font-size:14px;margin:0;color:var(--muted)}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}
+  .field input{
+    width:100%;padding:13px 14px;border:0;border-radius:10px;
+    background:var(--field);color:#1f2633;font-size:15px;outline:none;
+  }
+  .field input::placeholder{color:#9aa2b1}
+  .field input:focus{box-shadow:0 0 0 3px rgba(232,100,26,.45)}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  button{
+    width:100%;margin-top:6px;padding:15px 18px;border:0;border-radius:12px;
+    background:var(--accent);color:#fff;font-size:16px;font-weight:800;
+    letter-spacing:.3px;text-transform:uppercase;cursor:pointer;
+    transition:background .15s ease,transform .05s ease;
+  }
+  button:hover{background:var(--accent-h)}
+  button:active{transform:translateY(1px)}
+  button:disabled{opacity:.65;cursor:not-allowed}
+  .msg{margin-top:14px;font-size:14px;text-align:center;min-height:20px}
+  .msg.error{color:var(--err)}
+  .legal{margin-top:14px;font-size:11px;color:var(--muted);text-align:center;line-height:1.5}
+  /* estado de sucesso */
+  .done{text-align:center;padding:12px 4px}
+  .done .check{
+    width:56px;height:56px;border-radius:50%;background:var(--accent);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 14px;
+    font-size:28px;color:#fff;
+  }
+  .done h2{margin:0 0 6px;font-size:20px;font-weight:800}
+  .done p{margin:0;color:var(--muted);font-size:14px}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <form id="form" novalidate>
+      <div class="head">
+        <h1>Garanta sua vaga no Influência 2.0</h1>
+        <p>Faça sua pré-inscrição e seja o primeiro a saber quando as vagas oficiais abrirem.</p>
+      </div>
+
+      <div class="field">
+        <label for="nome">Nome</label>
+        <input id="nome" name="nome" type="text" autocomplete="name" placeholder="Seu nome completo" required />
+      </div>
+      <div class="field">
+        <label for="email">E-mail</label>
+        <input id="email" name="email" type="email" autocomplete="email" placeholder="voce@empresa.com" required />
+      </div>
+      <div class="field">
+        <label for="telefone">Telefone</label>
+        <input id="telefone" name="telefone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(11) 99999-9999" required />
+      </div>
+      <div class="field">
+        <label for="empresa">Empresa</label>
+        <input id="empresa" name="empresa" type="text" autocomplete="organization" placeholder="Nome da sua empresa" required />
+      </div>
+
+      <!-- honeypot anti-spam: humanos não preenchem -->
+      <div class="hp" aria-hidden="true">
+        <label>Não preencha<input id="website" name="website" type="text" tabindex="-1" autocomplete="off" /></label>
+      </div>
+
+      <button type="submit" id="submit">Quero a minha vaga!</button>
+      <div class="msg" id="msg"></div>
+      <div class="legal">Ao enviar, você concorda em receber comunicações da Spark Maxx sobre o evento.</div>
+    </form>
+
+    <div class="done hidden" id="done">
+      <div class="check">✓</div>
+      <h2>Pré-inscrição confirmada!</h2>
+      <p>Você está na lista. Assim que as vagas abrirem, avisamos você em primeira mão.</p>
+    </div>
+  </div>
+
+<script>
+  // ==== CONFIG: URL de produção do webhook n8n ====
+  var WEBHOOK_URL = "https://growthsparkmaxx.app.n8n.cloud/webhook/pre-inscricao-influencia";
+
+  var form = document.getElementById("form");
+  var msg = document.getElementById("msg");
+  var btn = document.getElementById("submit");
+  var tel = document.getElementById("telefone");
+
+  // máscara simples de telefone BR
+  tel.addEventListener("input", function () {
+    var v = tel.value.replace(/\D/g, "").slice(0, 11);
+    if (v.length > 6) v = "(" + v.slice(0,2) + ") " + v.slice(2,7) + "-" + v.slice(7);
+    else if (v.length > 2) v = "(" + v.slice(0,2) + ") " + v.slice(2);
+    else if (v.length > 0) v = "(" + v;
+    tel.value = v;
+  });
+
+  function setError(text){ msg.textContent = text; msg.className = "msg error"; }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    msg.className = "msg"; msg.textContent = "";
+
+    // honeypot preenchido = bot: finge sucesso e sai
+    if (document.getElementById("website").value) { showDone(); return; }
+
+    if (!form.checkValidity()) { setError("Preencha todos os campos corretamente."); form.reportValidity(); return; }
+
+    var payload = {
+      nome: document.getElementById("nome").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      telefone: tel.value.trim(),
+      empresa: document.getElementById("empresa").value.trim(),
+      origem: "beehiiv-influencia-2.0",
+      pagina: (document.referrer || location.href)
+    };
+
+    btn.disabled = true;
+    var original = btn.textContent;
+    btn.textContent = "Enviando...";
+
+    fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+    .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json().catch(function(){return {};}); })
+    .then(function () { showDone(); })
+    .catch(function () {
+      btn.disabled = false; btn.textContent = original;
+      setError("Ops, não conseguimos enviar. Tente novamente em instantes.");
+    });
+  });
+
+  function showDone(){
+    form.classList.add("hidden");
+    document.getElementById("done").classList.remove("hidden");
+  }
+</script>
+</body>
+</html>
